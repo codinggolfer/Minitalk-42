@@ -6,7 +6,7 @@
 /*   By: eagbomei <eagbomei@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:28:17 by eagbomei          #+#    #+#             */
-/*   Updated: 2024/03/07 16:37:37 by eagbomei         ###   ########.fr       */
+/*   Updated: 2024/03/11 13:41:21 by eagbomei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	send_bit(int pid, char c)
 		else
 			if (kill(pid, SIGUSR1) == -1)
 				ft_client_error("kill function failure");
-		usleep(10000);
+		usleep(100);
 		shift++;
 	}
 }
@@ -55,7 +55,7 @@ int	main(int ac, char **av)
 		str = av[2];
 		while (*str)
 			send_bit(pid, *str++);
-		send_bit(pid, '\n');
+		send_bit(pid, '\0');
 	}
 	else
 		ft_client_error("Too few arguments or too many arguments");
