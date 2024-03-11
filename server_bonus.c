@@ -6,12 +6,24 @@
 /*   By: eagbomei <eagbomei@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:27:14 by eagbomei          #+#    #+#             */
-/*   Updated: 2024/03/07 17:13:34 by eagbomei         ###   ########.fr       */
+/*   Updated: 2024/03/11 14:36:17 by eagbomei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include <signal.h>
+
+static char	*append_string(char *lines, char ret)
+{
+	char		*temp;
+	static char	tstr[2];
+
+	tstr[0] = ret;
+	tstr[1] = '\0';
+	temp = ft_strjoin(lines, tstr);
+	free(lines);
+	return (temp);
+}
 
 static void	ft_serverb_error(char *msg)
 {
@@ -23,6 +35,7 @@ void	handler(int signum, siginfo_t *info, void *context)
 {
 	static int	c = 0;
 	static int	shift = 0;
+	static char	*str = NULL;
 
 	(void)context;
 	if (signum == SIGUSR2)
@@ -32,14 +45,19 @@ void	handler(int signum, siginfo_t *info, void *context)
 	shift++;
 	if (shift == 7)
 	{
-		ft_putchar_fd(c, 1);
+		if (!str)
+			str = ft_strdup("");
+		str = append_string(str, c);
 		shift = 0;
+		if (c == 0)
+		{
+			ft_printf("%s\n", str);
+			free(str);
+			str = NULL;
+			kill(info->si_pid, SIGUSR1);
+		}
 		c = 0;
 	}
-	if (signum == SIGUSR2)
-		kill(info->si_pid, SIGUSR2);
-	else if (signum == SIGUSR1)
-		kill(info->si_pid, SIGUSR1);
 }
 
 int	main(void)

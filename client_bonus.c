@@ -6,7 +6,7 @@
 /*   By: eagbomei <eagbomei@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:27:04 by eagbomei          #+#    #+#             */
-/*   Updated: 2024/03/07 17:13:18 by eagbomei         ###   ########.fr       */
+/*   Updated: 2024/03/11 14:36:54 by eagbomei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	send_bit(int pid, char c)
 		else
 			if (kill(pid, SIGUSR1) == -1)
 				ft_clientb_error("kill function failure");
-		usleep(10000);
+		usleep(100);
 		shift++;
 	}
 }
@@ -42,9 +42,7 @@ void	send_bit(int pid, char c)
 void	client_handler(int signum)
 {
 	if (signum == SIGUSR1)
-		ft_putstr_fd("server recieved '0' succesfully\n", 1);
-	if (signum == SIGUSR2)
-		ft_putstr_fd("server recieved '1' succesfully\n", 1);
+		ft_putstr_fd("server recieved message succesfully\n", 1);
 }
 
 int	main(int ac, char **av)
@@ -58,8 +56,6 @@ int	main(int ac, char **av)
 	sa.sa_handler = client_handler;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 		ft_clientb_error("sigaction failure");
-	if (sigaction(SIGUSR2, &sa, NULL) == -1)
-		ft_clientb_error("sigaction failure");
 	if (ac == 3)
 	{
 		while (av[1][i] != '\0')
@@ -69,7 +65,7 @@ int	main(int ac, char **av)
 		str = av[2];
 		while (*str)
 			send_bit(pid, *str++);
-		send_bit(pid, '\n');
+		send_bit(pid, '\0');
 	}
 	else
 		ft_clientb_error("Too few arguments or too many arguments");

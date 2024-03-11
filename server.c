@@ -6,7 +6,7 @@
 /*   By: eagbomei <eagbomei@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 13:45:53 by eagbomei          #+#    #+#             */
-/*   Updated: 2024/03/11 13:33:41 by eagbomei         ###   ########.fr       */
+/*   Updated: 2024/03/11 14:35:33 by eagbomei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	handler(int signum)
 		shift = 0;
 		if (c == 0)
 		{
-			ft_printf("%s\n", str, 1);
+			ft_printf("%s\n", str);
 			free(str);
 			str = NULL;
 		}
